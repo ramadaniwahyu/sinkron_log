@@ -1,0 +1,67 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+
+{% block styles %}
+{% endblock styles %}
+    
+{% block breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="/beranda"><i class="fas fa-tachometer-alt"></i> Beranda</a></li>
+    <li class="breadcrumb-item active"><i class="fas fa-clipboard-check"></i> {{title}}</li>
+</ol>
+{% endblock breadcrumbs %}
+
+{% block contents %}
+{{ utils.flashed_messages(dismissible=True) }}
+<div class="card-body">
+    <div class="table-responsive">
+        <table id="myData" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th width=5%></th>
+                    <th>Nomor Usul</th>
+                    <th>Perihal</th>
+                    <th>Tanggal</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for agenda in daftar %}
+                <tr>
+                    <td>
+                        <a class="btn btn-app" href="{{ url_for('advokat.daftar_advokat', id=agenda.id) }}"><i data-toggle="tooltip" data-placement="top" title="Lihat Advokat" class="fas fa-users text-info"></i></a>
+                    </td>
+                    <td>
+                      {{ agenda.nomor }} <br />
+                      {{ agenda.group }} <br />
+                      <small><i>Tanggal Surat: {{ agenda.tgl.strftime('%d-%m-%Y') }}</i></small>
+                    </td>
+                    <td>{{ agenda.hal }}</td>
+                    <td class="text-center">
+                        {{ agenda.diubah_pada.strftime('%H:%M:%S') }} <br />
+                        {{ agenda.diubah_pada.strftime('%d-%m-%Y') }}
+                    </td>
+                    <td>
+                      {{ agenda.ket }}<br />
+                      {% if agenda.balasan %}
+                          {% for a in agenda.balasan %}
+                          <a href="/static/uploads/balasan/{{ a.filename }}" target="blank">
+                          <i class="fas fa-file-alt"></i>
+                          </a>
+                          {% endfor %}
+                      {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}       
+            </tbody>
+        </table>
+    </div> 
+</div>
+{% endblock contents %}
+
+{% block modals %}
+{% endblock modals %}
+
+{% block scripts %}
+{% endblock scripts %}

@@ -1,0 +1,61 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+
+{% block styles %}
+{{ dropzone.load_css() }}
+{% endblock styles %}
+
+{% block breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="/beranda"><i class="fas fa-tachometer-alt"></i> Beranda</a></li>
+    <li class="breadcrumb-item active"><i class="fas fa-cloud-upload-alt"></i> Upload Dokumen</li>
+</ol>
+{% endblock breadcrumbs %}
+
+{% block contents %}
+
+<div class="card">
+    <div class="card-body">
+        {{ dropzone.create(action=url_for('advokat.upload')) }}
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <h4>Tabel Format Nama Dokumen</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+                <thead class=>
+                    <tr>
+                        <th width=5%>No</th>
+                        <th>Nama</th>
+                        <th>Format</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for no, dokumen in daftar %}
+                    <tr>
+                        <td>{{ no }}</td>
+                        <td>{{ dokumen.name }}</td>
+                        <td>{{ dokumen.desc}}</td>
+                        <td>{{ dokumen.ket }}</td>
+                    </tr>
+                    {% endfor %}       
+                </tbody>
+            </table>
+        </div>
+        <p>*NIK = Nomor Induk Kependudukan</p>
+    </div>
+</div>
+{% endblock contents %}
+
+{% block modals %}
+{% endblock modals %}
+
+{% block scripts %}
+{{ dropzone.load_js() }}
+{{ dropzone.config() }}
+{% endblock scripts %}

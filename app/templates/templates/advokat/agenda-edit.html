@@ -1,0 +1,37 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+
+{% block styles %}
+{% endblock styles %}
+    
+{% block breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="/beranda"><i class="fas fa-tachometer-alt"></i> Beranda</a></li>
+    <li class="breadcrumb-item active"><a href="/usul-agenda"><i class="fas fa-file-export"></i> Usul Agenda</a></li>
+    <li class="breadcrumb-item active">{{ title }}</li>
+</ol>
+{% endblock breadcrumbs %}
+
+{% block contents %}
+{{ utils.flashed_messages(dismissible=True) }}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
+            </div>
+            <div class="col-6">
+                <div id="view_dokumen"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contents %}
+
+{% block modals %}
+{% endblock modals %}
+
+{% block scripts %}
+<script>PDFObject.embed("{{ url_for('static', filename='uploads/pengantar/'+ agenda.pengantar) }}", "#view_dokumen");</script>
+{% endblock scripts %}

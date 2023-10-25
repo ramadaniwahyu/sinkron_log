@@ -1,0 +1,41 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+
+{% block styles %}
+{% endblock styles %}
+    
+{% block breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="/beranda"><i class="fas fa-tachometer-alt"></i> Beranda</a></li>
+    <li class="breadcrumb-item"><a href="/usul-agenda"><i class="fas fa-file-export"></i> Usul Agenda</a></li>
+    <li class="breadcrumb-item"><a href="/usul-agenda/{{ agenda.id }}/advokat"> Input Data Advokat</a></li>
+    <li class="breadcrumb-item active"> {{title}}</li>
+</ol>
+{% endblock breadcrumbs %}
+
+{% block contents %}
+{{ utils.flashed_messages(dismissible=True) }}
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
+            </div>
+            <div class="col-6 text-center">
+                {% if advokat.foto %}
+                <img src="/static/img/advokat/{{ advokat.foto }}" alt="{{ advokat.name }}-{{ advokat.nomor_id }}" width="300">
+                {% else %}
+                <img src="/static/img/user-default.png" alt="{{ advokat.name }}-{{ advokat.nomor_id }}" width="300">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contents %}
+
+{% block modals %}
+{% endblock modals %}
+
+{% block scripts %}
+{% endblock scripts %}

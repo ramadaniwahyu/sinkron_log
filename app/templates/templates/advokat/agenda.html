@@ -1,0 +1,76 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+
+{% block styles %}
+{% endblock styles %}
+    
+{% block breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="/beranda"><i class="fas fa-tachometer-alt"></i> Beranda</a></li>
+    <li class="breadcrumb-item active"><i class="fas fa-file-export"></i> {{title}}</li>
+</ol>
+{% endblock breadcrumbs %}
+
+{% block contents %}
+{{ utils.flashed_messages(dismissible=True) }}
+<div class="card">
+    <div class="card-header text-right">
+        <button type="button" class="btn bg-teal waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Tambah Agenda</button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="myData" class="table table-bordered table-striped table-hover">
+                <thead class=>
+                    <tr>
+                        <th></th>
+                        <th>Nomor</th>
+                        <th>Perihal</th>
+                        <th>Organisasi</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for agenda in daftar %}
+                    <tr>
+                        <td width=15% class="text-center">
+                            <a class="btn btn-app" href="{{ url_for('advokat.agenda_edit', id=agenda.id) }}"><i data-toggle="tooltip" data-placement="top" title="Ubah" class="fas fa-edit text-info"></i></a>
+                            <a class="btn btn-app" href="{{ url_for('advokat.agenda_advokat', id=agenda.id) }}"><i data-toggle="tooltip" data-placement="top" title="Input Advokat" class="fas fa-users text-primary"></i></a>
+                            <a class="btn btn-app" href="{{ url_for('advokat.agenda_sent', id=agenda.id) }}"><i data-toggle="tooltip" data-placement="top" title="Kirim Agenda" class="fas fa-paper-plane text-success"></i></a>
+                            <a class="btn btn-app" href="{{ url_for('advokat.agenda_delete', id=agenda.id) }}"><i data-toggle="tooltip" data-placement="top" title="Hapus" class="fas fa-trash text-danger"></i></a>
+                            
+                        </td>
+                        <td>
+                            {{ agenda.nomor }}<br />
+                            <small>{{ agenda.tgl }}</small>
+                        </td>
+                        <td>{{ agenda.hal}}</td>
+                        <td>{{ agenda.group }}</td>
+                        <td>{{ agenda.ket }}</td>
+                    </tr>
+                    {% endfor %}       
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock contents %}
+
+{% block modals %}
+{{ utils.flashed_messages(dismissible=True) }}
+<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock modals %}
+
+{% block scripts %}
+{% endblock scripts %}

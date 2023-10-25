@@ -1,0 +1,96 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+
+{% block styles %}
+{% endblock styles %}
+    
+{% block breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="/beranda"><i class="fas fa-tachometer-alt"></i> Beranda</a></li>
+    <li class="breadcrumb-item"><a href="/verifikasi-agenda"><i class="fas fa-clipboard-check"></i> Verifikasi Agenda</a></li>
+    <li class="breadcrumb-item active"> {{title}}</li>
+</ol>
+{% endblock breadcrumbs %}
+
+{% block contents %}
+{{ utils.flashed_messages(dismissible=True) }}
+<div class="card">
+    <div class="card-header">
+        <a class="btn btn-danger" href="/verifikasi-agenda">Kembali</a>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <td width=20%>Nomor Surat / Tanggal</td>
+                            <td width=5%>:</td>
+                            <td>{{ agenda.nomor }} / {{ agenda.tgl.strftime('%d-%m-%Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td width=20%>Perihal</td>
+                            <td width=5%>:</td>
+                            <td>{{ agenda.hal }}</td>
+                        </tr>
+                        <tr>
+                            <td width=20%>Organisasi Advokat</td>
+                            <td width=5%>:</td>
+                            <td>{{ agenda.group }} </td>
+                        </tr>
+                    </table>
+                </div>
+                <hr>
+                <div id="view_dokumen"></div>
+            </div>
+            <div class="col-6">
+                {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
+                <hr>
+                <button type="button" class="btn bg-teal waves-effect m-r-20" data-toggle="modal" data-target="#defaultModal">Lampirkan berkas</button>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>File</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for no, lampiran in daftar %}
+                            <tr>
+                                <td>{{ no }}</td>
+                                <td>{{ lampiran.name }}</td>
+                                <td>
+                                    <a href="/static/uploads/lampiran/{{ lampiran.filename }}" target="blank"><i data-toggle="tooltip" data-placement="top" title="Unduh" class="fas fa-file-download"></i></a>
+                                    <a href="{{ url_for('admin.lampiran_del', id=lampiran.id) }}"><i data-toggle="tooltip" data-placement="top" title="Hapus" class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}       
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contents %}
+
+{% block modals %}
+<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                {{ wtf.quick_form(form2, button_map={'submit': 'primary'}) }}
+            </div>
+        </div>
+    </div>
+</div>{% endblock modals %}
+
+{% block scripts %}
+<script>PDFObject.embed("{{ url_for('static', filename='uploads/pengantar/'+ agenda.pengantar) }}", "#view_dokumen");</script>
+{% endblock scripts %}

@@ -1,0 +1,60 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+
+{% block styles %}
+{% endblock styles %}
+    
+{% block breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="/beranda"><i class="fas fa-tachometer-alt"></i> Beranda</a></li>
+    <li class="breadcrumb-item"><a href="/verifikasi-agenda/{{ advokat.agenda_id}}/advokat"><i class="fas fa-file-export"></i> Verifikasi Advokat</a></li>
+    <li class="breadcrumb-item active"> {{title}}</li>
+</ol>
+{% endblock breadcrumbs %}
+
+{% block contents %}
+{{ utils.flashed_messages(dismissible=True) }}
+<div class="card">
+    <div class="row pb-5 pt-5">
+        <div class="col-6 text-center">
+            {% if advokat.foto %}
+            <img src="/static/img/advokat/{{ advokat.foto }}" alt="{{ advokat.name }}-{{ advokat.nik }}" width="200">
+            {% else %}
+            <img src="/static/img/user-default.png" alt="{{ advokat.name }}-{{ advokat.nik }}" width="200">
+            {% endif %}
+            <br />
+            <br />
+            <h5>{{ advokat.name }}</h5>
+            <i>{{ advokat.nik }}</i><br />
+            <b>{{ advokat.group }}</b> 
+        </div>
+        <div class="col-6">
+            {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
+        </div>
+        <div class="col-6">
+            <b>Dokumen Persyaratan</b>
+            {% if dokumen %}
+            <ol>
+                {% for a in dokumen %}
+                <li>
+                    <a href="/static/uploads/{{ a.dokumen }}" target="blank">
+                        <i data-toggle="tooltip" data-placement="top" title="{{ a.name }}" class="fas fa-file-alt"></i>
+                        {{ a.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ol>
+            {% else %}
+            <p>Tidak ada dokumen yg dilampirkan</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock contents %}
+
+{% block modals %}
+{% endblock modals %}
+
+{% block scripts %}
+{% endblock scripts %}

@@ -1,0 +1,97 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap/utils.html" as utils %}
+{% extends "base.html" %}
+
+{% block styles %}
+{% endblock styles %}
+    
+{% block breadcrumbs %}
+<ol class="breadcrumb float-sm-right">
+    <li class="breadcrumb-item"><a href="/beranda"><i class="fas fa-tachometer-alt"></i> Beranda</a></li>
+    <li class="breadcrumb-item"><a href="/verifikasi-agenda"><i class="fas fa-file-export"></i> Verifikasi Agenda</a></li>
+    <li class="breadcrumb-item active"> {{title}}</li>
+</ol>
+{% endblock breadcrumbs %}
+
+{% block contents %}
+{{ utils.flashed_messages(dismissible=True) }}
+<div class="card">
+    <div class="card-header">
+        <a type="button" class="btn btn-danger waves-effect m-r-20" href="/verifikasi-agenda">Kembali</a>  &nbsp;  &nbsp; 
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="myData" class="table table-bordered table-striped table-hover">
+                <thead class=>
+                    <tr>
+                        <th width=5%></th>
+                        <th width=5%></th>
+                        <th>Nama/NIK</th>
+                        <th>Organisasi</th>
+                        <th>Dokumen</th>
+                        <th>Status</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for advokat in daftar %}
+                    <tr>
+                        <td>
+                            <a class="btn btn-app" href="{{ url_for('admin.daftar_advokat_ver', id=advokat.id)}}"><i data-toggle="tooltip" data-placement="top" title="Verifikasi" class="fas fa-check-square text-primary"></i></a>
+                        </td>
+                        <td>
+                            <img src="/static/img/advokat/{{ advokat.foto }}" width=60px />
+                        </td>
+                        <td>
+                            {{ advokat.name }}<br />
+                            <i>{{ advokat.nik }}</i>
+                        </td>
+                        <td>{{ advokat.group }}</td>
+                        <td>
+                            <ol>
+                                {% for dok in dokumen %}
+                                    {% if dok.nik == advokat.nik %}
+                                    <li>
+                                    <a href="/static/uploads/{{ dok.dokumen }}" target="blank">
+                                        <i data-toggle="tooltip" data-placement="top" title="{{ dok.name }}" class="fas fa-file-alt"></i>
+                                        {{ dok.name }}
+                                    </a>
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ol>
+                        </td>
+                        <td class="text-center">
+                            {% if advokat.status=='BELUM' %}
+                                <div style="background-color:yellow">
+                                  {{ advokat.status }}
+                                </div>
+                                {% elif advokat.status=='PROSES' %}
+                                <div class="text-white" style="background-color:blue">
+                                  {{ advokat.status }}
+                                </div>
+                                {% elif advokat.status=='BATAL' %}
+                                <div class="text-white" style="background-color:red">
+                                  {{ advokat.status }}
+                                </div>
+                                {% elif advokat.status=='SELESAI' %}
+                                <div class="text-white" style="background-color:green">
+                                  {{ advokat.status }}
+                                </div>
+                                {% endif %}
+                            </td>
+                        <td>{{ advokat.ket }}</td>
+                    </tr>
+                    {% endfor %}       
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock contents %}
+
+{% block modals %}
+{% endblock modals %}
+
+{% block scripts %}
+{% endblock scripts %}
